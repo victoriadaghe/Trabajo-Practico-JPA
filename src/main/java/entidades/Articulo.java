@@ -6,38 +6,40 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="Articulo")
-public class Articulo implements Serializable{
+@Table(name = "Articulo")
+public class Articulo implements Serializable {
+
     private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "cantidad")
+    @Column(name = "cantidad", nullable = false)
     private int cantidad;
 
-    @Column(name = "denominacion")
+    @Column(name = "denominacion", nullable = false, length = 100)
     private String denominacion;
 
-    @Column(name = "precio")
+    @Column(name = "precio", nullable = false)
     private int precio;
 
-    //RELACIONES
-    @OneToMany(mappedBy = "articulo", cascade = CascadeType.PERSIST)
-    private List<DetalleFactura> detallesfacturas = new ArrayList<DetalleFactura>();
+    // Relaciones
+    @OneToMany(mappedBy = "articulo", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<DetalleFactura> detallesFacturas = new ArrayList<>();
 
-
-
-    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "articulo_categoria",
-            joinColumns = @JoinColumn(name = "Articulo_id"),
+            joinColumns = @JoinColumn(name = "articulo_id"),
             inverseJoinColumns = @JoinColumn(name = "categoria_id")
     )
-    private List<Categoria> categorias = new ArrayList<Categoria>();
+    private List<Categoria> categorias = new ArrayList<>();
 
     // Constructor por defecto
-    public Articulo() {}
+    public Articulo() {
+        // Constructor vacío
+    }
 
     // Constructor con parámetros
     public Articulo(int cantidad, String denominacion, int precio) {
@@ -47,23 +49,6 @@ public class Articulo implements Serializable{
     }
 
     // Getters y Setters
-
-
-    public List<DetalleFactura> getDetallesfacturas() {
-        return detallesfacturas;
-    }
-
-    public void setDetallesfacturas(List<DetalleFactura> detallesfacturas) {
-        this.detallesfacturas = detallesfacturas;
-    }
-
-    public List<Categoria> getCategorias() {
-        return categorias;
-    }
-
-    public void setCategorias(List<Categoria> categorias) {
-        this.categorias = categorias;
-    }
 
     public Long getId() {
         return id;
@@ -96,4 +81,21 @@ public class Articulo implements Serializable{
     public void setPrecio(int precio) {
         this.precio = precio;
     }
+
+    public List<DetalleFactura> getDetallesFacturas() {
+        return detallesFacturas;
+    }
+
+    public void setDetallesFacturas(List<DetalleFactura> detallesFacturas) {
+        this.detallesFacturas = detallesFacturas;
+    }
+
+    public List<Categoria> getCategorias() {
+        return categorias;
+    }
+
+    public void setCategorias(List<Categoria> categorias) {
+        this.categorias = categorias;
+    }
+
 }
