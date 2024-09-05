@@ -1,12 +1,10 @@
 package entidades;
 
-import lombok.Getter;
-
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-//@Table( name = "Detalle Factura")
+//@Table(name = "detalle_factura")
 public class DetalleFactura implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -15,68 +13,48 @@ public class DetalleFactura implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "cantidad")
+    @Column(name = "cantidad", nullable = false)
     private int cantidad;
 
-    @Column(name = "subtotal")
+    @Column(name = "subtotal", nullable = false)
     private int subtotal;
 
-
-
-    //RELACIONES
-    @ManyToOne (cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "fk_factura")
+    // Relaciones
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "fk_factura", referencedColumnName = "id", nullable = false)
     private Factura factura;
 
-
-
-
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "fk_articulo")
+    @JoinColumn(name = "fk_articulo", referencedColumnName = "id", nullable = false)
     private Articulo articulo;
 
-
-
     // Constructor por defecto
-    public DetalleFactura() {}
+    public DetalleFactura() {
+        // Constructor vacío
+    }
 
-    // Constructor con parámetros
+    // Constructor con parámetros (sin factura)
     public DetalleFactura(int cantidad, int subtotal) {
         this.cantidad = cantidad;
         this.subtotal = subtotal;
     }
+
+    // Constructor con parámetros (con artículo)
     public DetalleFactura(int cantidad, int subtotal, Articulo articulo) {
         this.cantidad = cantidad;
         this.subtotal = subtotal;
         this.articulo = articulo;
     }
 
-    public DetalleFactura(int cantidad, int subtotal, Articulo articulo,Factura factura) {
+    // Constructor con parámetros (con artículo y factura)
+    public DetalleFactura(int cantidad, int subtotal, Articulo articulo, Factura factura) {
         this.cantidad = cantidad;
         this.subtotal = subtotal;
         this.articulo = articulo;
         this.factura = factura;
     }
 
-
     // Getters y Setters
-
-
-    public Factura getFactura() {
-        return factura;
-    }
-
-    public void setFactura(Factura factura) {
-        this.factura = factura;
-    }
-
-    public Articulo getArticulo() {
-        return articulo;
-    }
-
-    public void setArticulo(Articulo articulo) {
-        this.articulo = articulo;
-    }
 
     public Long getId() {
         return id;
@@ -101,4 +79,13 @@ public class DetalleFactura implements Serializable {
     public void setSubtotal(int subtotal) {
         this.subtotal = subtotal;
     }
-}
+
+    public Factura getFactura() {
+        return factura;
+    }
+
+    public void setFactura(Factura factura) {
+        this.factura = factura;
+    }
+
+    public Art
