@@ -15,31 +15,36 @@ public class Cliente implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "nombre")
+    @Column(name = "nombre", nullable = false, length = 50)
     private String nombre;
 
-    @Column(name = "apellido")
+    @Column(name = "apellido", nullable = false, length = 50)
     private String apellido;
 
-    @Column(name = "dni", unique = true)
+    @Column(name = "dni", unique = true, nullable = false)
     private int dni;
 
-    //RELACIONES
+    // Relaciones
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_domicilio")
+    @JoinColumn(name = "fk_domicilio", referencedColumnName = "id", nullable = false)
     private Domicilio domicilio;
 
-    @OneToMany(mappedBy = "cliente")
-    private List<Factura> facturas = new ArrayList<Factura>();
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Factura> facturas = new ArrayList<>();
 
-    public Cliente() {}
+    // Constructor por defecto
+    public Cliente() {
+        // Constructor vacío
+    }
 
+    // Constructor con parámetros (sin domicilio)
     public Cliente(String nombre, String apellido, int dni) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.dni = dni;
     }
 
+    // Constructor con parámetros (con domicilio)
     public Cliente(String nombre, String apellido, int dni, Domicilio domicilio) {
         this.nombre = nombre;
         this.apellido = apellido;
@@ -47,13 +52,7 @@ public class Cliente implements Serializable {
         this.domicilio = domicilio;
     }
 
-    public Domicilio getDomicilio() {
-        return domicilio;
-    }
-
-    public void setDomicilio(Domicilio domicilio) {
-        this.domicilio = domicilio;
-    }
+    // Getters y Setters
 
     public Long getId() {
         return id;
@@ -86,6 +85,20 @@ public class Cliente implements Serializable {
     public void setDni(int dni) {
         this.dni = dni;
     }
+
+    public Domicilio getDomicilio() {
+        return domicilio;
+    }
+
+    public void setDomicilio(Domicilio domicilio) {
+        this.domicilio = domicilio;
+    }
+
+    public List<Factura> getFacturas() {
+        return facturas;
+    }
+
+    public void setFacturas(List<Factura> facturas) {
+        this.facturas = facturas;
+    }
 }
-
-
