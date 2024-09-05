@@ -1,56 +1,45 @@
 package entidades;
 
-
-import lombok.Builder;
-
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name ="Domicilio")
+@Table(name = "Domicilio")
 public class Domicilio implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "nombre_calle")
+    @Column(name = "nombre_calle", nullable = false, length = 100)
     private String nombreCalle;
 
-    @Column(name = "numero")
+    @Column(name = "numero", nullable = false)
     private int numero;
 
-    @OneToOne(mappedBy = "domicilio")
+    @OneToOne(mappedBy = "domicilio", cascade = CascadeType.ALL, orphanRemoval = true)
     private Cliente cliente;
 
     // Constructor por defecto
-    public Domicilio() {}
+    public Domicilio() {
+        // Constructor vacío
+    }
 
-    // Constructor con parámetros
+    // Constructor con parámetros (sin cliente)
     public Domicilio(String nombreCalle, int numero) {
         this.nombreCalle = nombreCalle;
         this.numero = numero;
     }
 
-    public Domicilio(String nombreCalle, int numero,Cliente cliente) {
+    // Constructor con parámetros (con cliente)
+    public Domicilio(String nombreCalle, int numero, Cliente cliente) {
         this.nombreCalle = nombreCalle;
         this.numero = numero;
         this.cliente = cliente;
     }
 
-
-
-
-
-
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
     // Getters y Setters
 
     public long getId() {
@@ -76,5 +65,12 @@ public class Domicilio implements Serializable {
     public void setNumero(int numero) {
         this.numero = numero;
     }
-}
 
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+}
