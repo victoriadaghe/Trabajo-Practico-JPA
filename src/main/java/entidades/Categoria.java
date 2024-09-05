@@ -6,44 +6,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table( name = "Categoria")
+@Table(name = "Categoria")
 public class Categoria implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "denominacion")
+    @Column(name = "denominacion", nullable = false, length = 100)
     private String denominacion;
 
-    @ManyToMany(mappedBy = "categorias")
-    private List<Articulo> articulos = new ArrayList<Articulo>();
-
-
-
+    @ManyToMany(mappedBy = "categorias", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Articulo> articulos = new ArrayList<>();
 
     // Constructor por defecto
-    public Categoria() {}
+    public Categoria() {
+        // Constructor vacío
+    }
 
     // Constructor con parámetros
     public Categoria(String denominacion) {
         this.denominacion = denominacion;
     }
 
-
-
-
     // Getters y Setters
-
-
-    public List<Articulo> getArticulos() {
-        return articulos;
-    }
-
-    public void setArticulos(List<Articulo> articulos) {
-        this.articulos = articulos;
-    }
 
     public Long getId() {
         return id;
@@ -59,5 +47,13 @@ public class Categoria implements Serializable {
 
     public void setDenominacion(String denominacion) {
         this.denominacion = denominacion;
+    }
+
+    public List<Articulo> getArticulos() {
+        return articulos;
+    }
+
+    public void setArticulos(List<Articulo> articulos) {
+        this.articulos = articulos;
     }
 }
