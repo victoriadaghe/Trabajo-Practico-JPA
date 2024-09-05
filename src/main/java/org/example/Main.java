@@ -16,54 +16,60 @@ public class Main {
         try {
             em.getTransaction().begin();
 
-            Factura factura1 = new Factura();
+            //cargo factura
+            Factura fact1 = new Factura();
 
-            factura1.setNumero(12);
-            factura1.setFecha("10/06/2020");
+            fact1.setNumero(1);
+            fact1.setFecha("09/09/2024");
 
-           Domicilio domicilio1 = new Domicilio("San Martin",1224);
-            Cliente cliente1 = new Cliente("Ramiro" , "Diz" , 153344);
-            cliente1.setDomicilio(domicilio1);
-            domicilio1.setCliente(cliente1);
+            //Cargo domicilio
+           Domicilio dom1 = new Domicilio("San Martin",1224);
 
-            factura1.setCliente(cliente1);
+            //Cargo cliente y lo vinculo con factura y domicilio
+            Cliente cli1 = new Cliente("Carlos" , "Sainz" , 41873946);
+            cli1.setDomicilio(dom1);
+            dom1.setCliente(cli1);
+            fact1.setCliente(cli1);
+            
+            //Cargo categorias
+            Categoria deporte = new Categoria("deporte");
+            Categoria moda = new Categoria("moda");
+            Categoria maquillaje = new Categoria("maquillaje");
 
-            Categoria electronica = new Categoria("electronica");
-            Categoria cocina = new Categoria("cocina");
-            Categoria Jardin = new Categoria("Jardin");
+                //Cargo Articulos y los vinculo con sus categorias
+            Articulo articulo1 = new Articulo(10 , "Calza" ,20000);
+            Articulo articulo2= new Articulo(10,"Labial",8000);
 
-            Articulo art1 = new Articulo(200 , "Freidora de Aire" ,10000);
-            Articulo art2= new Articulo(20,"Corta Cesped",50000);
+            articulo1.getCategorias().add(moda);
+            articulo1.getCategorias().add(deporte);
+            moda.getArticulos().add(articulo1);
+            deporte.getArticulos().add(articulo1);
 
-            art1.getCategorias().add(electronica);
-            art1.getCategorias().add(cocina);
-            electronica.getArticulos().add(art1);
-            cocina.getArticulos().add(art1);
+            articulo2.getCategorias().add(maquillaje);
+            maquillaje.getArticulos().add(articulo2);
 
-            art2.getCategorias().add(Jardin);
-            Jardin.getArticulos().add(art2);
+            //Vinculos los articulos con su factura y creo detalle factura
+            DetalleFactura detfac1 = new DetalleFactura();
+            detfac1.setArticulo(articulo1);
+            detfac1.setCantidad(1);
+            detfac1.setSubtotal(20000);
 
-            DetalleFactura detalle1 = new DetalleFactura();
-            detalle1.setArticulo(art1);
-            detalle1.setCantidad(2);
-            detalle1.setSubtotal(20000);
+            articulo1.getDetallesfacturas().add(detfac1);
+            fact1.getDetalles().add(detfac1);
+            detfac1.setFactura(fac1);
 
-            art1.getDetallesfacturas().add(detalle1);
-            factura1.getDetalles().add(detalle1);
-            detalle1.setFactura(factura1);
+            DetalleFactura detfac2 = new DetalleFactura();
+            detfac2.setArticulo(art2);
+            detfac2.setCantidad(2);
+            detfac2.setSubtotal(16000);
 
-            DetalleFactura detalle2 = new DetalleFactura();
-            detalle2.setArticulo(art2);
-            detalle2.setCantidad(1);
-            detalle2.setSubtotal(50000);
+            articulo2.getDetallesfacturas().add(detalle2);
+            fact1.getDetalles().add(detfac2);
+            detfac2.setFactura(fact1);
 
-            art2.getDetallesfacturas().add(detalle2);
-            factura1.getDetalles().add(detalle2);
-            detalle2.setFactura(factura1);
+            fact1.setTotal(36000);
 
-            factura1.setTotal(70000);
-
-            em.persist(factura1);
+            em.persist(fact1);
 
 
             em.flush();
