@@ -1,13 +1,12 @@
 package entidades;
 
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table (name = "Factura")
+@Table(name = "Factura")
 public class Factura implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -16,62 +15,45 @@ public class Factura implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "fecha")
+    @Column(name = "fecha", nullable = false, length = 20)
     private String fecha;
 
-    @Column(name = "numero")
+    @Column(name = "numero", nullable = false)
     private int numero;
 
-    @Column(name = "total")
+    @Column(name = "total", nullable = false)
     private int total;
 
-
+    // Relación con Cliente
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "fk_cliente")
+    @JoinColumn(name = "fk_cliente", referencedColumnName = "id", nullable = false)
     private Cliente cliente;
 
- //   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-   // private List<DetalleFactura> detalles= new ArrayList<DetalleFactura>();
-
-       @OneToMany( mappedBy = "factura", cascade = CascadeType.ALL, orphanRemoval = true)
-     private List<DetalleFactura> detalles= new ArrayList<DetalleFactura>();
-
-
+    // Relación con DetalleFactura
+    @OneToMany(mappedBy = "factura", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DetalleFactura> detalles = new ArrayList<>();
 
     // Constructor por defecto
-    public Factura() {}
+    public Factura() {
+        // Constructor vacío
+    }
 
-    // Constructor con parámetros
+    // Constructor con parámetros (sin cliente)
     public Factura(String fecha, int numero, int total) {
         this.fecha = fecha;
         this.numero = numero;
         this.total = total;
     }
 
+    // Constructor con parámetros (con cliente)
     public Factura(String fecha, int numero, int total, Cliente cliente) {
         this.fecha = fecha;
         this.numero = numero;
         this.total = total;
-        this.cliente = cliente;}
-
-    // Getters y Setters
-
-
-    public List<DetalleFactura> getDetalles() {
-        return detalles;
-    }
-
-    public void setDetalles(List<DetalleFactura> detalles) {
-        this.detalles = detalles;
-    }
-
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
+
+    // Getters y Setters
 
     public long getId() {
         return id;
@@ -103,5 +85,21 @@ public class Factura implements Serializable {
 
     public void setTotal(int total) {
         this.total = total;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public List<DetalleFactura> getDetalles() {
+        return detalles;
+    }
+
+    public void setDetalles(List<DetalleFactura> detalles) {
+        this.detalles = detalles;
     }
 }
